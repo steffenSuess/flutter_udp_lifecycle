@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 class LifecycleProvider with ChangeNotifier {
@@ -7,6 +8,7 @@ class LifecycleProvider with ChangeNotifier {
 
   set lifecycleState(AppLifecycleState state) {
     _lifecycleState = state;
+    FirebaseCrashlytics.instance.log(state.toString());
     notifyListeners();
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -14,6 +15,7 @@ class UdpProvider with ChangeNotifier {
   void clearData() {
     _data?.clear();
     notifyListeners();
+    FirebaseCrashlytics.instance.log('UdpProvider data cleared');
   }
 
   startListening() async {
@@ -23,7 +25,7 @@ class UdpProvider with ChangeNotifier {
         updPort,
       );
       _socket.handleError((error, stackTrace) {
-        print('UDP Socket Error: ${error.toString()}');
+        FirebaseCrashlytics.instance.recordError(error, stackTrace);
       });
       _socket.listen(
         (event) {
@@ -35,23 +37,26 @@ class UdpProvider with ChangeNotifier {
           }
         },
         onError: (error, stackTrace) {
-          print('UDP Listening Error: ${error.toString()}');
+          FirebaseCrashlytics.instance.recordError(error, stackTrace);
         },
         onDone: () {
-          _socket = null;
+          FirebaseCrashlytics.instance.log("Socket onDone");
         },
       );
     }
+    FirebaseCrashlytics.instance.log("started Listening");
   }
 
   void stopListening() {
     _socket?.close();
     clearData();
+    FirebaseCrashlytics.instance.log("stopped Listening");
   }
 
   @override
   void dispose() {
     stopListening();
     super.dispose();
+    FirebaseCrashlytics.instance.log("UdpProvider disposed");
   }
 }
