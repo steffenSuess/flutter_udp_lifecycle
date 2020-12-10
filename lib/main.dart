@@ -97,6 +97,7 @@ class MyApp extends StatelessWidget {
 
             // Once complete, show your application
             if (snapshot.connectionState == ConnectionState.done) {
+              FirebaseCrashlytics.instance.log('App started');
               return AppLifecycleReactor();
             }
 
