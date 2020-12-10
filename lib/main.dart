@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'components/app_lifecycle_reactor.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
